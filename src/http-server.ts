@@ -36,7 +36,7 @@ console.log('Environment variables validated successfully');
 
 // Create Express app
 const app = express();
-const port = process.env.PORT || 3000;
+const port = parseInt(process.env.PORT || '3000', 10);
 
 // Security middleware
 app.use(helmet({

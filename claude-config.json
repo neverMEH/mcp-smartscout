@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "smartscout-domo": {
+      "command": "node",
+      "args": ["C:/Users/Aeciu/OneDrive/Desktop/Smartscout/mcp-smartscout-domo/dist/server.js"]
+    }
+  }
+}

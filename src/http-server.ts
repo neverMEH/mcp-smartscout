@@ -12,14 +12,27 @@ import { ListToolsRequestSchema, CallToolRequestSchema } from '@modelcontextprot
 // Load environment variables
 dotenv.config();
 
+console.log('Starting SmartScout MCP HTTP Server...');
+console.log('Node version:', process.version);
+console.log('Current directory:', process.cwd());
+
 // Validate required environment variables
 const requiredEnvVars = ['DOMO_INSTANCE', 'DOMO_ACCESS_TOKEN'];
+const missingVars = [];
 for (const envVar of requiredEnvVars) {
   if (!process.env[envVar]) {
-    console.error(`Missing required environment variable: ${envVar}`);
-    process.exit(1);
+    missingVars.push(envVar);
   }
 }
+
+if (missingVars.length > 0) {
+  console.error('ERROR: Missing required environment variables:', missingVars.join(', '));
+  console.error('Please set the following environment variables:');
+  missingVars.forEach(v => console.error(`  - ${v}`));
+  process.exit(1);
+}
+
+console.log('Environment variables validated successfully');
 
 // Create Express app
 const app = express();
@@ -212,12 +225,13 @@ app.use((err: any, req: express.Request, res: express.Response, next: express.Ne
 });
 
 // Start server
-app.listen(port, () => {
+const server = app.listen(port, '0.0.0.0', () => {
   console.log(`SmartScout MCP HTTP Server running on port ${port}`);
   console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
   console.log(`CORS origins: ${corsOrigins.join(', ')}`);
   console.log(`API keys configured: ${apiKeyManager.getAllKeys().length}`);
   
+  // Log all environment variables in development
   if (process.env.NODE_ENV !== 'production') {
     console.log('\nDevelopment endpoints:');
     console.log(`  Health: http://localhost:${port}/health`);
@@ -226,13 +240,38 @@ app.listen(port, () => {
   }
 });
 
+// Handle server errors
+server.on('error', (error: any) => {
+  console.error('Server error:', error);
+  if (error.code === 'EADDRINUSE') {
+    console.error(`Port ${port} is already in use`);
+  }
+  process.exit(1);
+});
+
 // Graceful shutdown
 process.on('SIGTERM', () => {
   console.log('SIGTERM received, shutting down gracefully...');
-  process.exit(0);
+  server.close(() => {
+    console.log('Server closed');
+    process.exit(0);
+  });
 });
 
 process.on('SIGINT', () => {
   console.log('SIGINT received, shutting down gracefully...');
-  process.exit(0);
+  server.close(() => {
+    console.log('Server closed');
+    process.exit(0);
+  });
+});
+
+// Log unhandled errors
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+});
+
+process.on('uncaughtException', (error) => {
+  console.error('Uncaught Exception:', error);
+  process.exit(1);
 });

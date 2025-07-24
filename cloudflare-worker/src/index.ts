@@ -14,8 +14,8 @@ export interface Env {
   DOMO_ACCESS_TOKEN: string;
   API_KEYS: string;
   
-  // KV namespace for rate limiting
-  RATE_LIMIT: KVNamespace;
+  // KV namespace for rate limiting (optional)
+  RATE_LIMIT?: KVNamespace;
   
   // Optional D1 database for API keys
   DB?: D1Database;
@@ -77,20 +77,24 @@ export default {
           });
         }
 
-        // Check rate limit
-        const rateLimitResult = await checkRateLimit(apiKey, env.RATE_LIMIT);
-        if (!rateLimitResult.allowed) {
-          return new Response(JSON.stringify({
-            error: 'Rate limit exceeded',
-            retryAfter: rateLimitResult.retryAfter
-          }), {
-            status: 429,
-            headers: {
-              'Content-Type': 'application/json',
-              'Retry-After': rateLimitResult.retryAfter.toString(),
-              ...corsHeaders
-            }
-          });
+        // Check rate limit (if KV namespace is available)
+        let rateLimitResult = { allowed: true, remaining: 100, resetAt: Date.now() + 60000 };
+        
+        if (env.RATE_LIMIT) {
+          rateLimitResult = await checkRateLimit(apiKey, env.RATE_LIMIT);
+          if (!rateLimitResult.allowed) {
+            return new Response(JSON.stringify({
+              error: 'Rate limit exceeded',
+              retryAfter: rateLimitResult.retryAfter
+            }), {
+              status: 429,
+              headers: {
+                'Content-Type': 'application/json',
+                'Retry-After': rateLimitResult.retryAfter!.toString(),
+                ...corsHeaders
+              }
+            });
+          }
         }
 
         // Handle MCP request

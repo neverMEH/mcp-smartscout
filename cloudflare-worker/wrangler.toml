@@ -1,4 +1,4 @@
-name = "mcp-smartscout"
+name = "smartscout"
 main = "src/index.ts"
 compatibility_date = "2024-01-01"
 
@@ -7,25 +7,13 @@ compatibility_date = "2024-01-01"
 # DOMO_INSTANCE = "your-instance"
 # DOMO_ACCESS_TOKEN = "your-token"
 
-# KV namespace for rate limiting
-[[kv_namespaces]]
-binding = "RATE_LIMIT"
-id = "your-kv-namespace-id"
-
-# D1 database for API keys (optional)
-# [[d1_databases]]
-# binding = "DB"
-# database_name = "mcp-smartscout"
-# database_id = "your-database-id"
-
-# Durable Objects for stateful connections (if needed)
-# [[durable_objects.bindings]]
-# name = "MCP_SESSION"
-# class_name = "MCPSession"
-
-# [[migrations]]
-# tag = "v1"
-# new_classes = ["MCPSession"]
+# KV namespace for rate limiting - TEMPORARILY DISABLED
+# To enable rate limiting:
+# 1. Create KV namespace in Cloudflare dashboard
+# 2. Uncomment and update the ID below
+# [[kv_namespaces]]
+# binding = "RATE_LIMIT"
+# id = "your-actual-kv-namespace-id"
 
 [env.production]
 # Production environment variables

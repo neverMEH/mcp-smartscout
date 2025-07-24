@@ -1,11 +1,12 @@
 {
-  "name": "mcp-smartscout",
+  "name": "smartscout",
   "compatibility_date": "2024-01-01",
-  "main": "src/index.ts",
-  "kv_namespaces": [
-    {
-      "binding": "RATE_LIMIT",
-      "id": "your-kv-namespace-id"
-    }
-  ]
+  "main": "src/index.ts"
+  // KV namespace configuration - add after creating in Cloudflare dashboard
+  // "kv_namespaces": [
+  //   {
+  //     "binding": "RATE_LIMIT",
+  //     "id": "your-actual-kv-namespace-id"
+  //   }
+  // ]
 }

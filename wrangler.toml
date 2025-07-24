@@ -1,7 +1,7 @@
 # Root-level Cloudflare Worker configuration
 # This tells Cloudflare to deploy the worker from the cloudflare-worker subdirectory
 
-name = "mcp-smartscout"
+name = "smartscout"
 main = "cloudflare-worker/src/index.ts"
 compatibility_date = "2024-01-01"
 
@@ -14,7 +14,7 @@ command = "cd cloudflare-worker && npm install"
 # DOMO_INSTANCE = "your-instance"
 # DOMO_ACCESS_TOKEN = "your-token"
 
-# KV namespace for rate limiting
-[[kv_namespaces]]
-binding = "RATE_LIMIT"
-id = "your-kv-namespace-id"  # You'll need to create this and update the ID
+# KV namespace for rate limiting - configure in Cloudflare dashboard
+# [[kv_namespaces]]
+# binding = "RATE_LIMIT"
+# id = "your-actual-kv-namespace-id"

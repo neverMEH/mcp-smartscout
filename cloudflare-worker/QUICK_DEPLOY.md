@@ -11,12 +11,17 @@ After connecting your GitHub repository:
    - `DOMO_ACCESS_TOKEN` = your-domo-token
    - `API_KEYS` = key1,key2,key3 (comma-separated list)
 
-2. **Go to Settings → Builds & deployments**:
+2. **IMPORTANT: Remove any KV namespace bindings** (if present):
+   - Go to Settings → Variables
+   - Under "KV namespace bindings", remove any RATE_LIMIT binding
+   - This prevents the "KV namespace 'your-kv-namespace-id' is not valid" error
+
+3. **Go to Settings → Builds & deployments**:
    - Root directory: `cloudflare-worker`
    - Build command: `npm install`
    - Build output directory: `/` (or leave empty)
 
-3. **Retry deployment**
+4. **Retry deployment**
 
 ### 2. Testing Your Deployment
 
@@ -73,3 +78,5 @@ Your MCP server is now running globally on Cloudflare's edge network with:
 - ✅ All SmartScout query tools
 - ✅ Optional rate limiting (when KV is configured)
 - ✅ Automatic scaling and DDoS protection
+- ✅ Server-Sent Events (SSE) support for streaming responses
+- ✅ Full Claude Desktop MCP compatibility

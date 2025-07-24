@@ -2,7 +2,7 @@
 
 ## Overview
 
-The SmartScout MCP Server provides HTTP API access to SmartScout's Amazon marketplace intelligence data via the Model Context Protocol (MCP). This API enables querying of products, brands, sellers, search terms, and historical data.
+The SmartScout MCP Server provides HTTP API access to SmartScout's Amazon marketplace intelligence data via the Model Context Protocol (MCP). This API enables querying of products, brands, sellers, search terms, and historical data. The server supports both standard JSON responses and Server-Sent Events (SSE) for streaming compatibility with Claude Desktop and other MCP clients.
 
 ## Base URL
 
